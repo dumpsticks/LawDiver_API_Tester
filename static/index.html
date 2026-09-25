@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LawDiver API Tester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">LD</div>
+        <div>
+          <div class="brand-name">API Tester</div>
+          <div class="brand-sub">LawDiver local console</div>
+        </div>
+      </div>
+      <div id="statusPill" class="status-pill muted">Checking key…</div>
+      <nav id="fnNav" class="fn-nav" aria-label="API functions"></nav>
+      <div class="sidebar-foot">
+        <a href="https://lawdiver.com/docs/api" target="_blank" rel="noreferrer">API docs</a>
+        <span>·</span>
+        <a href="https://lawdiver.com/products/api" target="_blank" rel="noreferrer">Product</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="main-head">
+        <div>
+          <h1 id="fnTitle">Pick a function</h1>
+          <p id="fnDesc" class="lede">Choose an endpoint from the menu, fill in the inputs, and run it. Results are shown in plain language — not raw JSON.</p>
+        </div>
+        <button type="button" id="historyBtn" class="ghost-btn">History</button>
+      </header>
+
+      <section class="panel" id="formPanel">
+        <form id="runForm" class="run-form"></form>
+        <div class="form-actions">
+          <button type="submit" form="runForm" id="runBtn" class="primary-btn" disabled>Run</button>
+          <label class="spacing-toggle" title="Space requests ~1s apart to stay under the 60/min account limit">
+            <input type="checkbox" id="softSpacing" checked />
+            Pace requests (1s)
+          </label>
+          <span id="busyHint" class="busy-hint" hidden>Calling LawDiver…</span>
+          <span id="rateLimitBanner" class="rate-banner" hidden></span>
+        </div>
+      </section>
+
+      <section class="panel results-panel" id="resultsPanel" hidden>
+        <div id="resultsMeta" class="results-meta"></div>
+        <div class="results-split">
+          <div class="results-col human-col">
+            <div class="col-label">Human view</div>
+            <div id="resultsBody" class="results-body"></div>
+          </div>
+          <div class="results-col machine-col">
+            <div class="col-label-row">
+              <div class="col-label">Machine view — request &amp; response</div>
+              <button type="button" id="copyMachineBtn" class="ghost-btn tiny-btn" hidden>Copy JSON</button>
+            </div>
+            <div id="machineBody" class="machine-body"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="historyDialog">
+    <div class="dialog-head">
+      <h2>Local request history</h2>
+      <button type="button" id="closeHistory" class="ghost-btn">Close</button>
+    </div>
+    <p class="hint">Stored in a local SQLite file on this machine only — not LawDiver’s production database.</p>
+    <div id="historyList" class="history-list"></div>
+  </dialog>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
