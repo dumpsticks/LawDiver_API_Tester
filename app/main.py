@@ -109,7 +109,7 @@ FUNCTIONS: list[dict[str, Any]] = [
                     {"value": "auto", "label": "Auto (recommended)"},
                     {"value": "citation", "label": "Citation"},
                     {"value": "case_name", "label": "Case name"},
-                    {"value": "keyword", "label": "Keyword / boolean"},
+                    {"value": "boolean", "label": "Boolean"},
                     {"value": "semantic", "label": "Semantic"},
                     {"value": "hybrid", "label": "Hybrid"},
                 ],

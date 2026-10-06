@@ -19,7 +19,7 @@ This repository is a **standalone tester app**. It is not the official API itsel
 
 LawDiver’s caselaw API lets you programmatically:
 
-- Search ~10M+ U.S. opinions with jurisdiction-scoped engines (citation, case name, keyword, semantic, hybrid, or auto)
+- Search ~10M+ U.S. opinions with jurisdiction-scoped engines (citation, case name, boolean, semantic, hybrid, or auto)
 - Cite-check one citation, a batch, or an entire PDF/DOCX brief
 - Resolve citations, retrieve cases and statute section text, pull good-law / cited-by graphs and opinion PDFs
 - Inspect your usage ledger and rate limits
