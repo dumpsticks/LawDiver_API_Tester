@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 DEFAULT_BASE = "https://lawdiver.com/api/v1"
 # Identify this examples client; bare urllib with no User-Agent often fails Cloudflare (1010).
 DEFAULT_USER_AGENT = (
-    "LawDiver-API-Examples/1.0 (+https://github.com/dumpsticks/LawDiver_api; python)"
+    "LawDiver-API-Examples/1.0 (+https://github.com/lawdiver/LawDiver_api; python)"
 )
 
 

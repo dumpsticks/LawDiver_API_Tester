@@ -9,7 +9,7 @@ This repository is a **standalone tester app**. It is not the official API itsel
 | **Product** | [lawdiver.com/products/api](https://lawdiver.com/products/api) |
 | **API docs** | [lawdiver.com/docs/api](https://lawdiver.com/docs/api) |
 | **Get an API key** | [lawdiver.com/account/api-keys](https://lawdiver.com/account/api-keys) |
-| **Official examples pack** | [dumpsticks/LawDiver_api](https://github.com/dumpsticks/LawDiver_api) |
+| **Official examples pack** | [lawdiver/LawDiver_api](https://github.com/lawdiver/LawDiver_api) |
 | **This tester (local UI)** | Open **http://127.0.0.1:8765/** after starting the app (see below) |
 | **Base URL** | `https://lawdiver.com/api/v1` |
 
@@ -63,7 +63,7 @@ It is useful if you are:
 4. Keys look like: `ld_live_xxxxxxxxxxxxxxxxxxxx`.  
 5. Treat the key as a **server-side secret**. Never put it in frontend bundles, screenshots, issues, or this git repo.
 
-More detail: [Authentication](https://github.com/dumpsticks/LawDiver_api/blob/main/docs/authentication.md) in the official examples pack, and the live docs at [lawdiver.com/docs/api](https://lawdiver.com/docs/api).
+More detail: [Authentication](https://github.com/lawdiver/LawDiver_api/blob/main/docs/authentication.md) in the official examples pack, and the live docs at [lawdiver.com/docs/api](https://lawdiver.com/docs/api).
 
 ---
 
@@ -72,7 +72,7 @@ More detail: [Authentication](https://github.com/dumpsticks/LawDiver_api/blob/ma
 ### 1. Clone
 
 ```bash
-git clone https://github.com/dumpsticks/LawDiver_API_Tester.git
+git clone https://github.com/lawdiver/LawDiver_API_Tester.git
 cd LawDiver_API_Tester
 ```
 
@@ -216,7 +216,7 @@ Upload a PDF or Word brief. The app starts `POST /citecheck/document`, polls the
 | Usage ledger | `GET /usage` |
 | Bulk upload | `POST /bulk`, then `GET /bulk/jobs/:id/result` |
 
-Field-level reference: [lawdiver.com/docs/api](https://lawdiver.com/docs/api) · Catalog notes: [LawDiver_api docs/endpoints.md](https://github.com/dumpsticks/LawDiver_api/blob/main/docs/endpoints.md).
+Field-level reference: [lawdiver.com/docs/api](https://lawdiver.com/docs/api) · Catalog notes: [LawDiver_api docs/endpoints.md](https://github.com/lawdiver/LawDiver_api/blob/main/docs/endpoints.md).
 
 ---
 
@@ -282,7 +282,7 @@ curl "https://lawdiver.com/api/v1/usage?days=7" \
 - **API product page:** [https://lawdiver.com/products/api](https://lawdiver.com/products/api)  
 - **API documentation:** [https://lawdiver.com/docs/api](https://lawdiver.com/docs/api)  
 - **Create / revoke API keys:** [https://lawdiver.com/account/api-keys](https://lawdiver.com/account/api-keys)  
-- **Official examples (TS / Python / cURL):** [https://github.com/dumpsticks/LawDiver_api](https://github.com/dumpsticks/LawDiver_api)  
+- **Official examples (TS / Python / cURL):** [https://github.com/lawdiver/LawDiver_api](https://github.com/lawdiver/LawDiver_api)  
 - **MCP (same key):** [https://lawdiver.com/mcp](https://lawdiver.com/mcp)
 
 ---
