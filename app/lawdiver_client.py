@@ -248,6 +248,42 @@ class LawDiverClient:
             out["report"] = self.document_report(job_id)
         return out
 
+    def start_bulk(self, requests: list[dict[str, Any]]) -> dict[str, Any]:
+        return self._request("POST", "/bulk", json={"requests": requests})
+
+    def bulk_job(self, job_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/bulk/jobs/{job_id}")
+
+    def bulk_result(self, job_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/bulk/jobs/{job_id}/result")
+
+    def bulk_upload(
+        self,
+        requests: list[dict[str, Any]],
+        *,
+        poll_seconds: Optional[float] = None,
+        max_polls: int = 360,
+    ) -> dict[str, Any]:
+        """Upload, poll, and return one combined document.
+
+        Each call is attempted 3 times by the API. The result is a single JSON
+        object once the job finishes.
+        """
+        started = self.start_bulk(requests)
+        job_id = started["jobId"]
+        delay = poll_seconds if poll_seconds is not None else float(started.get("pollAfterSeconds") or 5)
+        job: dict[str, Any] = started
+        for _ in range(max_polls):
+            if job.get("status") not in ("queued", "processing"):
+                break
+            time.sleep(delay)
+            job = self.bulk_job(job_id)
+        if job.get("status") not in ("completed", "failed"):
+            raise RuntimeError(
+                f"Bulk job still {job.get('status')} after {max_polls} polls."
+            )
+        return self.bulk_result(job_id)
+
     def usage(self, days: int = 30) -> dict[str, Any]:
         return self._request("GET", "/usage", params={"days": days})
 

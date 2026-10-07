@@ -7,6 +7,7 @@ Never connects to any LawDiver production database.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 from pathlib import Path
@@ -245,6 +246,35 @@ FUNCTIONS: list[dict[str, Any]] = [
         "description": "Volume by operation and your rate limits.",
         "fields": [
             {"name": "days", "label": "Days", "type": "number", "default": "30", "min": 1, "max": 365},
+        ],
+    },
+    {
+        "id": "bulk",
+        "label": "Bulk upload",
+        "group": "Batch",
+        "description": (
+            "Upload a JSON list of API calls. Each call is attempted 3 times. "
+            "When the job finishes you get one combined result. "
+            "Every API call has a time limit; complex searches can time out when usage is high. "
+            "When usage is low, the file runs in parallel and can finish faster."
+        ),
+        "fields": [
+            {
+                "name": "requestsJson",
+                "label": "Bulk JSON",
+                "type": "textarea",
+                "required": True,
+                "rows": 14,
+                "default": (
+                    '{\n'
+                    '  "requests": [\n'
+                    '    {"id": "jurisdictions", "method": "GET", "path": "/api/v1/jurisdictions"},\n'
+                    '    {"id": "usage", "method": "GET", "path": "/api/v1/usage"}\n'
+                    '  ]\n'
+                    '}'
+                ),
+                "hint": "Up to 100 calls. PDF downloads and document uploads stay as their own menu items. The tester waits until the job finishes.",
+            },
         ],
     },
 ]
@@ -596,6 +626,20 @@ def run_function(body: RunBody) -> dict[str, Any]:
                     "meta": {},
                 }
                 download = {"filename": path.name, "url": f"/api/downloads/{path.name}"}
+            elif body.functionId == "bulk":
+                raw_text = str(inputs.get("requestsJson") or "").strip()
+                if not raw_text:
+                    raise ValueError("Paste a JSON object with a requests array.")
+                try:
+                    parsed = json.loads(raw_text)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"Bulk JSON is not valid: {exc}") from exc
+                requests = parsed.get("requests") if isinstance(parsed, dict) else parsed
+                if not isinstance(requests, list) or not requests:
+                    raise ValueError('Expected { "requests": [ ... ] } or a JSON array.')
+                wire_request = _wire(method="POST", path="/bulk", body={"requests": requests})
+                raw = client.bulk_upload(requests)
+                view = formatters.format_bulk(raw)
             elif body.functionId == "usage":
                 days = int(inputs.get("days") or 30)
                 wire_request = _wire(method="GET", path="/usage", params={"days": days})

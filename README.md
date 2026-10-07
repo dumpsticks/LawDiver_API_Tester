@@ -146,6 +146,7 @@ Functions are grouped:
 | Cite check | Citations, Document upload, Document job status |
 | Case details | Metadata, Batch, Good-law, Cited by, Case PDF |
 | Account | Usage ledger |
+| Batch | Bulk upload |
 
 ### Dynamic inputs
 
@@ -180,6 +181,14 @@ Prefer scoped searches over national semantic blasts when you are iterating quic
 
 Famous case-name retrieves often return `status: "did_you_mean"` with candidates (HTTP 200). Use **Retrieve this case** on a candidate to follow up with `caseId`.
 
+### Bulk upload
+
+Paste a JSON file of API calls (`requests` array). The tester posts `POST /api/v1/bulk`, polls until the job finishes, and shows one combined result.
+
+Every API call has a time limit to completion. When API usage is high, complex searches can time out before they finish and come back as errors. Bulk upload attempts each call **3 times** before giving up, which is why a large run is more complete than a single pass. When usage is low, LawDiver runs calls from the file in parallel, so the batch can finish faster than sending them one at a time.
+
+A row marked not OK still has its last response in the machine view. That is an incomplete call, not proof the authority is missing. PDF downloads and document cite-check stay on their own menu items.
+
 ### Document cite-check
 
 Upload a PDF or Word brief. The app starts `POST /citecheck/document`, polls the job, and can download the report PDF into `downloads/`. Optional email fields request LawDiver’s email-link delivery.
@@ -205,6 +214,7 @@ Upload a PDF or Word brief. The app starts `POST /citecheck/document`, polls the
 | Cited by | `GET /cases/:id/cited-by` |
 | Case PDF | `GET /cases/:id/pdf` |
 | Usage ledger | `GET /usage` |
+| Bulk upload | `POST /bulk`, then `GET /bulk/jobs/:id/result` |
 
 Field-level reference: [lawdiver.com/docs/api](https://lawdiver.com/docs/api) · Catalog notes: [LawDiver_api docs/endpoints.md](https://github.com/dumpsticks/LawDiver_api/blob/main/docs/endpoints.md).
 

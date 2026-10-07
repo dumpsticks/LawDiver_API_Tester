@@ -557,3 +557,36 @@ def format_error(exc: Exception) -> dict[str, Any]:
         "retryAfterSeconds": None,
         "summaryText": "Request failed",
     }
+
+
+def format_bulk(payload: dict[str, Any]) -> dict[str, Any]:
+    results = payload.get("results") or []
+    rows = []
+    for row in results:
+        response = row.get("response") if isinstance(row.get("response"), dict) else {}
+        err = response.get("error") if isinstance(response, dict) else None
+        rows.append(
+            {
+                "id": row.get("id"),
+                "method": row.get("method"),
+                "path": row.get("path"),
+                "attempts": row.get("attempts"),
+                "ok": bool(row.get("ok")),
+                "httpStatus": row.get("httpStatus"),
+                "note": (err or {}).get("message") if isinstance(err, dict) else None,
+            }
+        )
+    succeeded = payload.get("succeeded")
+    failed = payload.get("failed")
+    return {
+        "kind": "bulk",
+        "headline": "Bulk result",
+        "subtitle": (
+            f"{succeeded} succeeded, {failed} failed, up to {payload.get('maxAttempts', 3)} attempts each. "
+            "Every API call has a time limit. A row with ok=false still includes its last response in the machine view."
+        ),
+        "status": payload.get("status"),
+        "rows": rows,
+        "summaryText": f"Bulk {payload.get('status')}: {succeeded} ok, {failed} failed",
+        "meta": {"requestId": payload.get("requestId"), "usage": payload.get("usage")},
+    }

@@ -492,6 +492,26 @@ function renderView(view) {
         .join("");
       break;
 
+    case "bulk":
+      body += `<article class="result-card">
+        <h3>${esc(view.headline || "Bulk result")}</h3>
+        <p>${esc(view.subtitle || "")}</p>
+        <div class="meta-line">Status: ${esc(view.status || "")}</div>
+      </article>`;
+      body += `<div class="table-wrap"><table class="data">
+        <thead><tr><th>Id</th><th>Call</th><th>Attempts</th><th>OK</th><th>HTTP</th></tr></thead>
+        <tbody>${(view.rows || [])
+          .map((r) => `<tr>
+            <td>${esc(r.id)}</td>
+            <td>${esc(r.method)} ${esc(r.path)}</td>
+            <td>${esc(r.attempts)}</td>
+            <td class="${r.ok ? "tone-ok" : "tone-danger"}">${r.ok ? "yes" : "no"}</td>
+            <td>${esc(r.httpStatus)}</td>
+          </tr>${r.note ? `<tr><td colspan="5">${esc(r.note)}</td></tr>` : ""}`)
+          .join("") || `<tr><td colspan="5">No rows.</td></tr>`}
+        </tbody></table></div>`;
+      break;
+
     case "download":
       body += `<article class="result-card">
         <p>${esc(view.subtitle || "")}</p>
